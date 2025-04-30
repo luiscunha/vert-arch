@@ -9,20 +9,20 @@ namespace Sacurt.VertArch.Api.Features.Articles;
 
 public static class GetArticle
 {
-    public record Query(Guid Id) : IRequest<Result<GetArticleResponse>>;
+    public record Query(Guid Id) : IRequest<Result<Response>>;
 
-    public record GetArticleResponse(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, List<string> Tags);
+    public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, List<string> Tags);
 
-    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<GetArticleResponse>>
+    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<Response>>
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-        public async Task<Result<GetArticleResponse>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<Response>> Handle(Query request, CancellationToken cancellationToken)
         {
             var article = await _dbContext.Articles
                 .AsNoTracking()
                 .Where(article => article.Id == request.Id)
-                .Select(article => new GetArticleResponse(article.Id,
+                .Select(article => new Response(article.Id,
                     article.Title,
                     article.Content,
                     article.CreatedOnUtc,
@@ -33,7 +33,7 @@ public static class GetArticle
 
             if (article == null)
             {
-                return Result.Failure<GetArticleResponse>(new Error("GetArticle.NotFound", "Article not found"));
+                return Result.Failure<Response>(new Error("GetArticle.NotFound", "Article not found"));
             }
 
             return Result.Success(article);

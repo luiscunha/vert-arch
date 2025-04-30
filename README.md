@@ -12,3 +12,4 @@ This demo adopts a feature-based approach, keeping related logic within the same
 - Result pattern for consistent operation outcomes;
 - Carter library (via NuGet) for register all endpoints;
 - Minimal APIs approach;
+- Filtering, Sorting and Paging endpoints;
