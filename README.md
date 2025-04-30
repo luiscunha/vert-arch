@@ -10,4 +10,5 @@ This demo adopts a feature-based approach, keeping related logic within the same
 - CQRS pattern for handling use case scenarios;
 - FluentValidation (via NuGet) for validating commands and queries;
 - Result pattern for consistent operation outcomes;
+- Carter library (via NuGet) for register all endpoints;
 - Minimal APIs approach;
