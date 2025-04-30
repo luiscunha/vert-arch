@@ -1,0 +1,15 @@
+@Sacurt.VertArch.Api_HostAddress = https://localhost:7294
+
+POST {{Sacurt.VertArch.Api_HostAddress}}/api/articles
+Accept: application/json
+Content-Type: application/json
+
+{
+    "title": "Test Article",
+    "content": "This is a test article.",
+    "tags": ["test",".net"] 
+}
+###
+
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/370B4604-35A6-4335-AD74-5E6BE9506411
+Accept: application/json

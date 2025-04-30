@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sacurt.VertArch.Api", "Sacurt.VertArch.Api\Sacurt.VertArch.Api.csproj", "{8989E890-7546-4AEC-85DC-D31EB13927AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8989E890-7546-4AEC-85DC-D31EB13927AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8989E890-7546-4AEC-85DC-D31EB13927AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8989E890-7546-4AEC-85DC-D31EB13927AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8989E890-7546-4AEC-85DC-D31EB13927AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B7FF1E0-6AEE-43FA-B86C-3DCAEA81F714}
+	EndGlobalSection
+EndGlobal
