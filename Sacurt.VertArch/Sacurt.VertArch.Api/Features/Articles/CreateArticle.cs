@@ -3,20 +3,13 @@ using FluentValidation;
 using MediatR;
 using Sacurt.VertArch.Api.Common;
 using Sacurt.VertArch.Api.Database;
-using Sacurt.VertArch.Api.Entities;
+using Sacurt.VertArch.Api.Entities; 
 
 namespace Sacurt.VertArch.Api.Features.Articles;
 
 public static class CreateArticle
 {
-    public class Command : IRequest<Result<Guid>>
-    {
-        public string Title { get; set; } = string.Empty;
-
-        public string Content { get; set; } = string.Empty;
-
-        public List<string> Tags { get; set; } = new();
-    }
+    public record Command(string Title, string Content, List<string> Tags) : IRequest<Result<Guid>>; 
 
     public class Validator : AbstractValidator<Command>
     {
@@ -60,27 +53,24 @@ public static class CreateArticle
 
             return article.Id;
         } 
-    }
-
-    public class Endpoint : ICarterModule
-    {
-        public void AddRoutes(IEndpointRouteBuilder app)
-        {
-            app.MapPost("api/articles", async (Command command, ISender sender) =>
-            {
-                var result = await sender.Send(command);
-
-                if (result.IsFailure)
-                {
-                    return Results.BadRequest(result.Error);    
-                }
-
-                return Results.Ok(result.Value);
-
-            });
-        }
-    }
-     
-
+    }  
 }
 
+public sealed class CreateArticleEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapPost("api/articles", async (CreateArticle.Command command, ISender sender) =>
+        {
+            var result = await sender.Send(command);
+
+            if (result.IsFailure)
+            {
+                return Results.BadRequest(result.Error);
+            }
+
+            return Results.Ok(result.Value);
+
+        });
+    }
+}
