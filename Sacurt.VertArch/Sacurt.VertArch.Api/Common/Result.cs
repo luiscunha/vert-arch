@@ -1,16 +1,11 @@
 ﻿namespace Sacurt.VertArch.Api.Common;
 
-public class Result
+internal class Result
 {
     protected internal Result(bool isSuccess, Error error)
     {
-        if (isSuccess && error != Error.None)
-        {
-            throw new InvalidOperationException();
-        }
-
-        if (!isSuccess && error == Error.None) {
-
+        if (isSuccess && error != Error.None || !isSuccess && error == Error.None)
+        {  
             throw new InvalidOperationException();
         }
 
@@ -18,7 +13,7 @@ public class Result
         Error = error;
     }
 
-    public bool IsSuccess { get; set; }
+    public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; }
@@ -39,7 +34,7 @@ public class Result
 
     public static Result<TValue> Create<TValue>(TValue? value) => value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 }
-public class Result<TValue> : Result
+internal class Result<TValue> : Result
 {
     private readonly TValue? _value;
 

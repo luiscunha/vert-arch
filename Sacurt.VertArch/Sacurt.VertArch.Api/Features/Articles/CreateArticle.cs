@@ -2,8 +2,10 @@
 using FluentValidation;
 using MediatR;
 using Sacurt.VertArch.Api.Common;
+using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
-using Sacurt.VertArch.Api.Entities; 
+using Sacurt.VertArch.Api.Entities;
+using Sacurt.VertArch.Api.Extensions;
 
 namespace Sacurt.VertArch.Api.Features.Articles;
 
@@ -34,7 +36,7 @@ public static class CreateArticle
             if (!validationResult.IsValid)
             {
                 return Result.Failure<Guid>(
-                    new Error("CreateArticle.Validation", validationResult.ToString())
+                    new Error(ErrorType.Validation, "CreateArticle.Validation", validationResult.ToString())
                 );
             }
 
@@ -60,13 +62,13 @@ public sealed class CreateArticleEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/articles", async (CreateArticle.Command command, ISender sender) =>
+        app.MapPost(ApiRoutes.Articles.Create, async (CreateArticle.Command command, ISender sender) =>
         {
             var result = await sender.Send(command);
 
             if (result.IsFailure)
             {
-                return Results.BadRequest(result.Error);
+                return ApiResultsExtensions.ProblemDetails(result);
             }
 
             return Results.Ok(result.Value);

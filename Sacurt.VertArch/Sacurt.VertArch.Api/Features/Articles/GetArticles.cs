@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Sacurt.VertArch.Api.Common;
+using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
 using Sacurt.VertArch.Api.Entities;
 using System.Linq.Expressions;
@@ -70,7 +71,7 @@ public sealed class GetArticlesEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/articles", async (
+        app.MapGet(ApiRoutes.Articles.GetArticles, async (
             string? searchTerm,
             string? sortColumn,
             string? sortOrder,

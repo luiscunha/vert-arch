@@ -3,7 +3,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Sacurt.VertArch.Api.Common;
+using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
+using Sacurt.VertArch.Api.Extensions;
 
 namespace Sacurt.VertArch.Api.Features.Articles;
 
@@ -33,7 +35,7 @@ public static class GetArticle
 
             if (article == null)
             {
-                return Result.Failure<Response>(new Error("GetArticle.NotFound", "Article not found"));
+                return Result.Failure<Response>(new Error(ErrorType.BadRequest, "GetArticle.NotFound", "Article not found"));
             }
 
             return Result.Success(article);
@@ -45,13 +47,13 @@ public sealed class GetArticleEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/articles/{id}", async (Guid id, ISender sender) =>
+        app.MapGet(ApiRoutes.Articles.GetArticle, async (Guid id, ISender sender) =>
         {
             var result = await sender.Send(new GetArticle.Query(id));
 
             if (result.IsFailure)
             {
-                return Results.NotFound(result.Error);
+                return ApiResultsExtensions.ProblemDetails(result);
             }
 
             return Results.Ok(result.Value);

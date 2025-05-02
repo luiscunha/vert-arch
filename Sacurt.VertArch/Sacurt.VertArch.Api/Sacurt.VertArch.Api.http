@@ -1,6 +1,6 @@
 @Sacurt.VertArch.Api_HostAddress = https://localhost:7294
 
-GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?sortColumn=title&sortOrder=desc&page=2&pageSize=4
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?sortColumn=title&sortOrder=desc&page=2&pageSize=3
 Accept: application/json
 
 ###
@@ -10,8 +10,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "title": "Vertical Architecture",
-    "content": "Adopts a feature-based approach, keeping related logic within the same file",
+    "title": "Vertical Architecture", 
     "tags": [".net","vert-arch", "c#", "architecture"] 
 }
 
