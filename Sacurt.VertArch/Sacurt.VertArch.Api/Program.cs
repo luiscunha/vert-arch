@@ -2,10 +2,15 @@ using Carter;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sacurt.VertArch.Api.Database;
+using Sacurt.VertArch.Api.Exceptions;
 using Sacurt.VertArch.Api.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
- 
+
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -31,8 +36,15 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.MapCarter();
+app.UseExceptionHandler();
+
+// Update empty API responses
+// Example: request for an unexisting resource
+// Instead of returning 404 with empty body, return 404 with problem details message
+app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
+
+app.MapCarter();
 
 app.Run();

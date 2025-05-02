@@ -20,3 +20,7 @@ GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/370B4604-35A6-4335-AD74-5E6
 Accept: application/json
 
 ###
+
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/NOT-EXISTING-ID
+Accept: application/json
+###
