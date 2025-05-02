@@ -9,6 +9,7 @@ internal static class ApiRoutes
         internal const string GetArticles = "api/articles";
         internal const string GetArticle = "api/articles/{id}";
         internal const string Create = "api/articles";
+        internal const string PublishArticle = "api/articles/{id}/publish";
     }
 
 

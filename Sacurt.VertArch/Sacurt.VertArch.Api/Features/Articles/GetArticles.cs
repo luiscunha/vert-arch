@@ -17,12 +17,10 @@ public static class GetArticles
     public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, bool IsPublished, List<string> Tags);
 
     internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<PagedList<Response>>>
-    {
-        private readonly ApplicationDbContext _dbContext = dbContext;
-
+    { 
         public async Task<Result<PagedList<Response>>> Handle(Query query, CancellationToken cancellationToken)
         {
-            IQueryable<Article> articlesQuery = _dbContext.Articles.AsNoTracking();
+            IQueryable<Article> articlesQuery = dbContext.Articles.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {

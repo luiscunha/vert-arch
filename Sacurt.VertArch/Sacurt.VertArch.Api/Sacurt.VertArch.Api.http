@@ -9,14 +9,13 @@ POST {{Sacurt.VertArch.Api_HostAddress}}/api/articles
 Accept: application/json
 Content-Type: application/json
 
-{
-    "title": "Vertical Architecture", 
+{ 
     "tags": [".net","vert-arch", "c#", "architecture"] 
 }
 
 ###
 
-GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/370B4604-35A6-4335-AD74-5E6BE9506411
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/E431C36F-2E6C-4CBB-B6B7-9D08269C7189
 Accept: application/json
 
 ###
@@ -24,3 +23,6 @@ Accept: application/json
 GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles/NOT-EXISTING-ID
 Accept: application/json
 ###
+
+PUT {{Sacurt.VertArch.Api_HostAddress}}/api/articles/E431C36F-2E6C-4CBB-B6B7-9D08269C7189/publish
+Accept: application/json

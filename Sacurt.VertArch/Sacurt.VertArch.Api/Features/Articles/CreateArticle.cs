@@ -26,13 +26,10 @@ public static class CreateArticle
 
     internal sealed class Handler(ApplicationDbContext dbContext, IValidator<Command> validator) 
         : IRequestHandler<Command, Result<Guid>>
-    {
-        private readonly ApplicationDbContext _dbContext = dbContext;
-        private readonly IValidator<Command> _validator = validator;
-
+    { 
         public async Task<Result<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request);
+            var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
                 return Result.Failure<Guid>(
@@ -49,9 +46,9 @@ public static class CreateArticle
                 CreatedOnUtc = DateTime.UtcNow
             };
 
-            await _dbContext.AddAsync(article, cancellationToken);
+            await dbContext.AddAsync(article, cancellationToken);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
             return article.Id;
         } 

@@ -6,6 +6,7 @@ using Sacurt.VertArch.Api.Common;
 using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
 using Sacurt.VertArch.Api.Extensions;
+using Sacurt.VertArch.Api.Validation;
 
 namespace Sacurt.VertArch.Api.Features.Articles;
 
@@ -16,12 +17,10 @@ public static class GetArticle
     public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, List<string> Tags);
 
     internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<Response>>
-    {
-        private readonly ApplicationDbContext _dbContext = dbContext;
-
+    { 
         public async Task<Result<Response>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var article = await _dbContext.Articles
+            var article = await dbContext.Articles
                 .AsNoTracking()
                 .Where(article => article.Id == request.Id)
                 .Select(article => new Response(article.Id,
@@ -35,7 +34,7 @@ public static class GetArticle
 
             if (article == null)
             {
-                return Result.Failure<Response>(new Error(ErrorType.BadRequest, "GetArticle.NotFound", "Article not found"));
+                return Result.Failure<Response>(ValidationErrors.Article.ArticleNotFound);
             }
 
             return Result.Success(article);

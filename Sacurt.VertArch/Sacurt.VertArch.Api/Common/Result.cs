@@ -33,6 +33,11 @@ internal class Result
     public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
 
     public static Result<TValue> Create<TValue>(TValue? value) => value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
+
+    internal static Result Failure(object articleAlreadyPublished)
+    {
+        throw new NotImplementedException();
+    }
 }
 internal class Result<TValue> : Result
 {
