@@ -11,15 +11,15 @@ namespace Sacurt.VertArch.Api.Features.Articles;
 
 public static class GetArticles
 {
-    public record Query(string? SearchTerm, string? SortColumn, string? SortOrder, int Page, int PageSize) : IRequest<Result<List<Response>>>;
+    public record Query(string? SearchTerm, string? SortColumn, string? SortOrder, int Page, int PageSize) : IRequest<Result<PagedList<Response>>>;
 
     public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, bool IsPublished, List<string> Tags);
 
-    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<List<Response>>>
+    internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<PagedList<Response>>>
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
-        public async Task<Result<List<Response>>> Handle(Query query, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<Response>>> Handle(Query query, CancellationToken cancellationToken)
         {
             IQueryable<Article> articlesQuery = _dbContext.Articles.AsNoTracking();
 
@@ -28,29 +28,19 @@ public static class GetArticles
                 articlesQuery = articlesQuery.Where(article =>
                     article.Title.Contains(query.SearchTerm) ||
                     article.Content.Contains(query.SearchTerm)
-                    );
+                );
             }
-
-            Expression<Func<Article, object>> keySelector = query.SortColumn?.ToLower() switch
-            {
-                "title" => article => article.Title,
-                "content" => article => article.Content,
-                "created" => article => article.CreatedOnUtc,
-                _ => article => article.Id
-            };
 
             if (query.SortOrder?.ToLower() == "desc")
             {
-                articlesQuery = articlesQuery.OrderByDescending(keySelector);   
+                articlesQuery = articlesQuery.OrderByDescending(GetKeyPropertySelector(query));
             }
             else
             {
-                articlesQuery = articlesQuery.OrderBy(keySelector);
+                articlesQuery = articlesQuery.OrderBy(GetKeyPropertySelector(query));
             }
 
-            var articles = await articlesQuery
-                .Skip((query.Page - 1) * query.PageSize)
-                .Take(query.PageSize)
+            var articlesResponsesQuery = articlesQuery
                 .Select(article => new Response(article.Id,
                     article.Title,
                     article.Content,
@@ -58,11 +48,21 @@ public static class GetArticles
                     article.PublishedOnUtc,
                     article.PublishedOnUtc.HasValue,
                     article.Tags
-                ))
-                .ToListAsync(cancellationToken);
+                ));
+
+            var articles = await PagedList<Response>.CreateAsync(articlesResponsesQuery, query.Page, query.PageSize, cancellationToken);
 
             return Result.Success(articles);
         }
+
+        private static Expression<Func<Article, object>> GetKeyPropertySelector(Query query)
+            => query.SortColumn?.ToLower() switch
+            {
+                "title" => article => article.Title,
+                "content" => article => article.Content,
+                "created" => article => article.CreatedOnUtc,
+                _ => article => article.Id
+            };
     }
 }
 
@@ -71,9 +71,9 @@ public sealed class GetArticlesEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/articles", async (
-            string? searchTerm, 
-            string? sortColumn, 
-            string? sortOrder, 
+            string? searchTerm,
+            string? sortColumn,
+            string? sortOrder,
             int page,
             int pageSize,
             ISender sender) =>
