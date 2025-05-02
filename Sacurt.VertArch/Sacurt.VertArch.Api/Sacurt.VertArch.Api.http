@@ -1,6 +1,6 @@
 @Sacurt.VertArch.Api_HostAddress = https://localhost:7294
 
-GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?sortColumn=title&sortOrder=desc&page=2&pageSize=3
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?searchTerm=test&page=1&pageSize=3
 Accept: application/json
 
 ###
