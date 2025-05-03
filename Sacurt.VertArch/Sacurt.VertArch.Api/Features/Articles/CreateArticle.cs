@@ -1,6 +1,7 @@
 ﻿using Carter;
 using FluentValidation;
 using MediatR;
+using Sacurt.VertArch.Api.Authentication;
 using Sacurt.VertArch.Api.Common;
 using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
@@ -19,8 +20,6 @@ public static class CreateArticle
         {
             RuleFor(x => x.Title).NotEmpty();
             RuleFor(x => x.Content).NotEmpty();
-
-            //RuleFor(x => x.Tags).NotEmpty().WithMessage("At least one tag is required.");
         }
     }
 
@@ -70,6 +69,7 @@ public sealed class CreateArticleEndpoint : ICarterModule
 
             return Results.Ok(result.Value);
 
-        });
+        })
+           .AddEndpointFilter<ApiKeyAuthenticationEndpointFilter>();
     }
 }

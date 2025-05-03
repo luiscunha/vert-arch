@@ -40,7 +40,21 @@ This demo adopts a feature-based approach, keeping related logic within the same
 
 - Exposes generic API endpoints that support filtering, sorting, and paging of data collections.
 
+🔐 API Key Authentication
+
+- The project implements a lightweight API Key authentication mechanism to restrict access to protected endpoints (POST & PUT).
+
+- Clients must provide a valid API key (via a custom header X-Api-Key) to authenticate requests.
+
 ⚠️ API Error Handling with ProblemDetails
 
 - Implements standardized error responses using the [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807) format (application/problem+json).
 - Helps API consumers understand errors better and integrates smoothly with tools like Swagger or Postman.
+
+
+🧯 Global Error Handling Middleware
+
+- A centralized exception handling middleware is used to catch and manage unhandled exceptions across the entire API pipeline.
+
+- Ensures consistent error formatting using the ProblemDetails standard (application/problem+json), improving client-side error parsing.
+

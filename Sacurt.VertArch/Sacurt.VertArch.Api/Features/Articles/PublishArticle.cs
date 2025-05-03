@@ -1,5 +1,6 @@
 ﻿using Carter;
 using MediatR;
+using Sacurt.VertArch.Api.Authentication;
 using Sacurt.VertArch.Api.Common;
 using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
@@ -50,6 +51,7 @@ public sealed class PublishArticleEndpoint : ICarterModule
             }
 
             return Results.NoContent();
-        });
+        })
+           .AddEndpointFilter<ApiKeyAuthenticationEndpointFilter>(); 
     }
 }

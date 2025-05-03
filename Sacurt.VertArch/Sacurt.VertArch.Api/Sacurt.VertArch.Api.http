@@ -1,6 +1,7 @@
 @Sacurt.VertArch.Api_HostAddress = https://localhost:7294
+@Sacurt.VertArch.Api_Key = 626900E4-CA61-41CA-8FCD-FC82F475B88B
 
-GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?searchTerm=test&page=1&pageSize=3
+GET {{Sacurt.VertArch.Api_HostAddress}}/api/articles?page=1&pageSize=3
 Accept: application/json
 
 ###
@@ -8,6 +9,7 @@ Accept: application/json
 POST {{Sacurt.VertArch.Api_HostAddress}}/api/articles
 Accept: application/json
 Content-Type: application/json
+X-Api-Key: {{Sacurt.VertArch.Api_Key}}
 
 { 
     "tags": [".net","vert-arch", "c#", "architecture"] 
@@ -26,3 +28,5 @@ Accept: application/json
 
 PUT {{Sacurt.VertArch.Api_HostAddress}}/api/articles/E431C36F-2E6C-4CBB-B6B7-9D08269C7189/publish
 Accept: application/json
+
+X-Api-Key: {{Sacurt.VertArch.Api_Key}}
