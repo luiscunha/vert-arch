@@ -38,7 +38,7 @@ namespace Sacurt.VertArch.Api.Migrations
                     b.Property<DateTime?>("PublishedOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Tags")
+                    b.PrimitiveCollection<string>("Tags")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

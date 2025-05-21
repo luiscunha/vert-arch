@@ -12,15 +12,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Article>(builder =>
-        {
-            builder.Property(a => a.Tags)
-                .HasConversion(
-                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null)
-                )
-                .HasColumnType("nvarchar(max)"); // Or use "json" if your database supports it (e.g., PostgreSQL)
-        });
+       // modelBuilder.Entity<Article>().OwnsOne(p => p.Tags, navBuilder => navBuilder.ToJson());
     }
 
     public DbSet<Article> Articles { get; set; }    
