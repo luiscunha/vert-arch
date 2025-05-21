@@ -14,7 +14,7 @@ public static class GetArticle
 {
     public record Query(Guid Id) : IRequest<Result<Response>>;
 
-    public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, List<string> Tags);
+    public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, ICollection<string> Tags);
 
     internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<Response>>
     { 

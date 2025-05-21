@@ -12,5 +12,5 @@ public class Article
 
     public DateTime? PublishedOnUtc { get; set; }
 
-    public List<string> Tags { get; set; } = new();
+    public ICollection<string> Tags { get; set; }
 }

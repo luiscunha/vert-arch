@@ -7,6 +7,7 @@ using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
 using Sacurt.VertArch.Api.Entities;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Sacurt.VertArch.Api.Features.Articles;
 
@@ -14,7 +15,7 @@ public static class GetArticles
 {
     public record Query(string? SearchTerm, string? SortColumn, string? SortOrder, int Page, int PageSize) : IRequest<Result<PagedList<Response>>>;
 
-    public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, bool IsPublished, List<string> Tags);
+    public record Response(Guid Id, string Title, string Content, DateTime CreatedOnUtc, DateTime? PublishedOnUtc, bool IsPublished, ICollection<string> Tags);
 
     internal sealed class Handler(ApplicationDbContext dbContext) : IRequestHandler<Query, Result<PagedList<Response>>>
     { 
@@ -26,7 +27,8 @@ public static class GetArticles
             {
                 articlesQuery = articlesQuery.Where(article =>
                     article.Title.Contains(query.SearchTerm) ||
-                    article.Content.Contains(query.SearchTerm)
+                    article.Content.Contains(query.SearchTerm) || 
+                    article.Tags.Any( tag => tag.Contains(query.SearchTerm))
                 );
             }
 
@@ -70,12 +72,13 @@ public sealed class GetArticlesEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet(ApiRoutes.Articles.GetArticles, async (
-            string? searchTerm,
+            ISender sender,
+            string ? searchTerm,
             string? sortColumn,
             string? sortOrder,
-            int page,
-            int pageSize,
-            ISender sender) =>
+            int page = AppDefaults.Page,
+            int pageSize = AppDefaults.PageSize
+            ) =>
         {
             var result = await sender.Send(new GetArticles.Query(searchTerm, sortColumn, sortOrder, page, pageSize));
 
