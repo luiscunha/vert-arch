@@ -6,7 +6,6 @@ This demo adopts a feature-based approach, keeping related logic within the same
 
 - The project uses EF Core as the Object-Relational Mapper (ORM) for interacting with a relational SQL database.
 - It abstracts the data access logic and allows for strong-typed LINQ queries, change tracking, and lazy/eager loading.
-
   
 📂 Database Migrations
 
@@ -22,7 +21,6 @@ This demo adopts a feature-based approach, keeping related logic within the same
 
 - Uses [FluentValidation](https://docs.fluentvalidation.net/en/latest/) for validating input models (commands and queries).
 - Validation logic is kept declarative and centralized, making it easy to maintain and test.
-
 
 🎯 Result Pattern for Operation Outcomes
 - Applies the Result<T> pattern to consistently return success or failure states.
@@ -51,10 +49,12 @@ This demo adopts a feature-based approach, keeping related logic within the same
 - Implements standardized error responses using the [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807) format (application/problem+json).
 - Helps API consumers understand errors better and integrates smoothly with tools like Swagger or Postman.
 
-
 🧯 Global Error Handling Middleware
 
 - A centralized exception handling middleware is used to catch and manage unhandled exceptions across the entire API pipeline.
-
 - Ensures consistent error formatting using the ProblemDetails standard (application/problem+json), improving client-side error parsing.
 
+🧠 In-Memory Caching
+
+- Uses ASP.NET Core's built-in in-memory caching (IMemoryCache) to optimize performance for frequently accessed data.
+- Ideal for reducing database round-trips and speeding up read-heavy operations like reference data, filter options, or repetitive queries.
