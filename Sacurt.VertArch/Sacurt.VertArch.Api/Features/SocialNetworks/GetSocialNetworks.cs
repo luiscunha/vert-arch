@@ -1,6 +1,7 @@
 ﻿using Carter;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Sacurt.VertArch.Api.Common;
 using Sacurt.VertArch.Api.Constants;
 using Sacurt.VertArch.Api.Database;
@@ -30,11 +31,16 @@ public sealed class GetSocialNetworksEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiRoutes.SocialNetworks.GetSocialNetworks, async (ISender sender) =>
+        app.MapGet(ApiRoutes.SocialNetworks.GetSocialNetworks, async (ISender sender, IMemoryCache cache) =>
         {
-            var socialNetworks = await sender.Send(new GetSocialNetworks.Query());
+            var cachedSocialNetworks = await cache.GetOrCreateAsync("social-networks", async (entry) =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
 
-            return Results.Ok(socialNetworks.Value);
+                return await sender.Send(new GetSocialNetworks.Query());
+            });
+
+            return Results.Ok(cachedSocialNetworks!.Value);
         });
     }
 }

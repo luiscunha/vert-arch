@@ -25,6 +25,8 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddCarter();
 builder.Services.AddValidatorsFromAssembly(assembly, ServiceLifetime.Scoped, includeInternalTypes: true);
+
+builder.Services.AddMemoryCache();
  
 var app = builder.Build();
 
