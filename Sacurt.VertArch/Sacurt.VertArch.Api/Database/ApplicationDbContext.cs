@@ -13,7 +13,18 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<Article>().OwnsOne(p => p.Tags, navBuilder => navBuilder.ToJson());
+        modelBuilder.Entity<Article>()
+          .Property(a => a.Title)
+              .HasColumnType("varchar(100)");
+
+        modelBuilder.Entity<Article>()
+          .Property(a => a.Content)
+              .HasColumnType("varchar(2000)");
+
+
+        modelBuilder.Entity<ArticleShare>()
+            .Property(a => a.Comments)
+                .HasColumnType("varchar(500)");
          
         modelBuilder.Entity<SocialNetwork>().HasData(new List<SocialNetwork>()
         {

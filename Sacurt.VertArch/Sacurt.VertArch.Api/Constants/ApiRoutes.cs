@@ -17,5 +17,8 @@ internal static class ApiRoutes
         internal const string GetSocialNetworks = "api/social-networks"; 
     }
 
-
+    internal static class ArticleShares
+    {
+        internal const string CreateArticleShare = "api/article-share/{articleId}";
+    }
 }

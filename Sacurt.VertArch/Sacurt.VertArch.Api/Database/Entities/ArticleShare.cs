@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public Guid ArticleId { get; set; }
+        public int SocialNetworkId { get; set; }
         public SocialNetwork SocialNetwork { get; set; }
         public DateTime SharedOnUtc { get; set; }
         public string? Comments { get; set; }
